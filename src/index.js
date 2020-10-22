@@ -1,3 +1,7 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-shadow */
+/* eslint-disable react/prop-types */
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-use-before-define */
 import React, {useState, useRef} from 'react';
 import {
@@ -9,6 +13,7 @@ import {
     ImageBackground,
     TextInput,
     TouchableOpacity,
+    Image,
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -72,8 +77,26 @@ const src = () => {
     ]);
     const [background, setBackground] = useState(lista[0].img);
 
+    const [index, setIndex] = useState(0);
+
     const _renderItem = ({item, index}) => {
-        return <View />;
+        return (
+            <View>
+                <TouchableOpacity>
+                    <Image
+                        source={{uri: item.img}}
+                        style={styles.carouselImg}
+                    />
+                    <Text sytle={styles.carouselText}>{item.title} </Text>
+                    <Icon
+                        name="play-circle-outline"
+                        size={30}
+                        color="#fff"
+                        style={styles.playIcon}
+                    />
+                </TouchableOpacity>
+            </View>
+        );
     };
 
     return (
@@ -87,7 +110,7 @@ const src = () => {
                     <ImageBackground
                         source={{uri: background}}
                         style={styles.imgBg}
-                        blurRadius={6}>
+                        blurRadius={5}>
                         <View style={styles.searchInput}>
                             <TextInput
                                 sytles={styles.input}
@@ -102,13 +125,34 @@ const src = () => {
 
                         <View style={styles.slideView}>
                             <Carousel
-                                styles={styles.Carousel}
+                                styles={styles.carousel}
                                 ref={carouselRef}
                                 data={lista}
                                 renderItem={_renderItem}
                                 sliderWidth={screenWidth}
                                 itemWidth={200}
                                 inactiveSlideOpacity={0.5}
+                                onSnapToItem={(index) => {
+                                    setBackground(lista[index].img);
+                                    setIndex(index);
+                                }}
+                            />
+                        </View>
+
+                        <View style={styles.moreInfo}>
+                            <View style={{marginTop: 10}}>
+                                <Text style={styles.movieTitle}>
+                                    {lista[index].title}
+                                </Text>
+                                <Text style={styles.movieDesc}>
+                                    {lista[index].text}
+                                </Text>
+                            </View>
+                            <Icon
+                                name="queue"
+                                size={30}
+                                color="#13139"
+                                style={{marginRight: 15, marginTop: 10}}
                             />
                         </View>
                     </ImageBackground>
@@ -167,5 +211,52 @@ const styles = StyleSheet.create({
         height: 350,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    carousel: {
+        flex: 1,
+        overflow: 'visible',
+    },
+    carouselImg: {
+        alignSelf: 'center',
+        width: 200,
+        height: 300,
+        borderRadius: 12,
+        backgroundColor: '#000',
+    },
+    carouselText: {
+        padding: 15,
+        color: '#fff',
+        position: 'absolute',
+        bottom: 10,
+        left: 2,
+        fontWeight: 'bold',
+    },
+    playIcon: {
+        position: 'absolute',
+        top: 15,
+        right: 15,
+    },
+    moreInfo: {
+        backgroundColor: '#fff',
+        width: screenWidth,
+        height: screenHeight,
+        borderTopRightRadius: 20,
+        borderTopLeftRadius: 20,
+        borderRadius: 20,
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+    },
+    movieTitle: {
+        paddingLeft: 15,
+        fontSize: 22,
+        fontWeight: 'bold',
+        color: '#999',
+        marginBottom: 5,
+    },
+    movieDesc: {
+        paddingLeft: 15,
+        color: '#131313',
+        fontSize: 14,
+        fontWeight: 'bold',
     },
 });
