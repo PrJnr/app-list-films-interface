@@ -151,7 +151,7 @@ const src = () => {
                             <Icon
                                 name="queue"
                                 size={30}
-                                color="#13139"
+                                color="#131313"
                                 style={{marginRight: 15, marginTop: 10}}
                             />
                         </View>
