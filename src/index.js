@@ -1,5 +1,5 @@
 /* eslint-disable no-use-before-define */
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import {
     View,
     Text,
@@ -12,11 +12,14 @@ import {
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Carousel from 'react-native-snap-carousel';
 
 // import { Container } from './styles';
 const {width: screenWidth, height: screenHeight} = Dimensions.get('window');
 
 const src = () => {
+    const carouselRef = useRef(null);
+
     const [lista, setLista] = useState([
         {
             title: 'O Justiceiro',
@@ -69,6 +72,10 @@ const src = () => {
     ]);
     const [background, setBackground] = useState(lista[0].img);
 
+    const _renderItem = ({item, index}) => {
+        return <View />;
+    };
+
     return (
         <ScrollView style={styles.container}>
             <View style={{flex: 1, height: screenHeight}}>
@@ -87,8 +94,22 @@ const src = () => {
                                 placeholder="Procurando Algo ?"
                             />
                             <TouchableOpacity style={styles.icon}>
-                                <Icon name="search" color="#fff" size={30} />
+                                <Icon name="search" color="#000" size={30} />
                             </TouchableOpacity>
+                        </View>
+
+                        <Text style={styles.TitlePage}>Lançamentos</Text>
+
+                        <View style={styles.slideView}>
+                            <Carousel
+                                styles={styles.Carousel}
+                                ref={carouselRef}
+                                data={lista}
+                                renderItem={_renderItem}
+                                sliderWidth={screenWidth}
+                                itemWidth={200}
+                                inactiveSlideOpacity={0.5}
+                            />
                         </View>
                     </ImageBackground>
                 </View>
@@ -120,6 +141,31 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         width: '95%',
         flexDirection: 'row',
+        alignSelf: 'center',
     },
-    icon: {},
+    input: {
+        width: '90%',
+        padding: 13,
+        paddingLeft: 20,
+        fontSize: 17,
+    },
+    icon: {
+        position: 'absolute',
+        right: 20,
+        top: 10,
+    },
+    TitlePage: {
+        color: '#fff',
+        fontSize: 25,
+        fontWeight: 'bold',
+        marginLeft: 10,
+        marginVertical: 10,
+    },
+
+    slideView: {
+        width: '100%',
+        height: 350,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
 });
